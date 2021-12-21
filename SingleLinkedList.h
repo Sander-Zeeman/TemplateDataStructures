@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
+ *   Initializations
+ */
 
 struct SLLNode {
   void *data;
@@ -20,6 +23,11 @@ void printSLLNode(SLLNode *node, char *(*custom_print)(void*)) {
   }
   printf("%s\n", custom_print(node->data));
 }
+
+
+/*
+ *   Creation and Freeing
+ */
 
 SLLNode* createSLLNode(void *data) {
   SLLNode *node = malloc(sizeof(*data) + sizeof(SLLNode*));
@@ -40,4 +48,61 @@ void freeSLLNode(SLLNode *node) {
   free(node);
 }
 
+
+/*
+ *    Helpers (length, at, contains, find)
+ */
+
+int lengthSLL(SLLNode *node) {
+  if (!node)
+    return 0;
+  return 1 + lengthSLL(node->next);
+}
+
+SLLNode *atSLL(SLLNode *node, int index) {
+  if (!index)
+    return node;
+  return atSLL(node->next, index-1);
+}
+
+SLLNode *findSLL(SLLNode *node, void *val) {
+  if (!node)
+    return NULL;
+  if (node->data == val)
+    return node;
+  return findSLL(node->next, val);
+}
+
+int containsSLL(SLLNode *node, void *val) {
+  if (findSLL(node, val) == NULL)
+    return 0;
+  return 1;
+}
+
+/*
+ *    Appending
+ */
+
+void createAppendSLLNode(SLLNode *node, void *data) {
+  appendSLLNode(node, createSLLNode(data));
+}
+
+void appendSLLNode(SLLNode *node, SLLNode *node2) {
+  while (node->next)
+    node = node->next;
+
+  node->next = node2;
+}
+
+
+/*
+ *    Deleting (with value, with node, with index)
+ */
+
+
+
+
+ /*
+  *    Swapping
+  */
 #endif
